@@ -47,7 +47,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-7xl font-bold text-gray-900 mb-6"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6"
             >
               <span className="text-orange-600">BhojRaj</span> Pandit
             </motion.h1>
@@ -56,7 +56,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl text-gray-600 mb-8 leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 leading-relaxed"
             >
               Experienced religious consultant offering traditional Hindu ceremonies, 
               pujas, and spiritual guidance with authenticity and devotion.
@@ -72,7 +72,7 @@ export default function Hero() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-700 transition-colors shadow-xl"
+                  className="bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-xl"
                 >
                   Book Appointment
                 </motion.button>
@@ -81,7 +81,7 @@ export default function Hero() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-white text-orange-600 border-2 border-orange-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-50 transition-colors shadow-xl"
+                  className="bg-white text-orange-600 border-2 border-orange-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-orange-50 transition-colors shadow-xl"
                 >
                   View Services
                 </motion.button>
@@ -93,19 +93,19 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="grid grid-cols-3 gap-6 mt-12"
+              className="grid grid-cols-3 gap-3 sm:gap-6 mt-8 sm:mt-12"
             >
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600">15+</div>
-                <div className="text-sm text-gray-600 mt-1">Years Experience</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">15+</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-1">Years Experience</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600">500+</div>
-                <div className="text-sm text-gray-600 mt-1">Ceremonies</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">500+</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-1">Ceremonies</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600">300+</div>
-                <div className="text-sm text-gray-600 mt-1">Happy Clients</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">300+</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-1">Happy Clients</div>
               </div>
             </motion.div>
           </motion.div>

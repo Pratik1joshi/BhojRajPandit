@@ -46,12 +46,12 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-bold mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
           >
             Gallery
           </motion.h1>
@@ -59,7 +59,7 @@ export default function GalleryPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-xl max-w-2xl mx-auto"
+            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
           >
             Glimpses of ceremonies and celebrations we've been honored to be part of
           </motion.p>
@@ -67,14 +67,14 @@ export default function GalleryPage() {
       </section>
 
       {/* Filter */}
-      <section className="py-8 sticky top-20 bg-white/95 backdrop-blur-md shadow-md z-40">
+      <section className="py-4 md:py-8 sticky top-20 bg-white/95 backdrop-blur-md shadow-md z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center space-x-4 overflow-x-auto pb-2">
+          <div className="flex justify-center space-x-3 md:space-x-4 overflow-x-auto pb-2 scrollbar-hide">
             {categories.map((category) => (
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                className={`px-6 py-2 rounded-full font-medium whitespace-nowrap transition-all ${
+                className={`px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.value
                     ? 'bg-orange-600 text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-orange-100'
@@ -88,7 +88,7 @@ export default function GalleryPage() {
       </section>
 
       {/* Gallery Grid */}
-      <section className="py-16">
+      <section className="py-8 md:py-16 pb-24 md:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-20">

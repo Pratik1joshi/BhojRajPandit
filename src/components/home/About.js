@@ -1,6 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import Image from 'next/image';
 
 export default function About() {
   const [ref, inView] = useInView({
@@ -34,14 +35,20 @@ export default function About() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center">
-                <span className="text-9xl opacity-30">🕉️</span>
-              </div>
-              <div className="absolute inset-0 bg-black/20"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                <h3 className="text-white text-2xl font-bold">15+ Years of Service</h3>
-                <p className="text-gray-200 mt-2">Dedicated to preserving Hindu traditions</p>
+            <div className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+              {/* Pandit Image */}
+              <Image
+                src="/aboutimage.jpeg"
+                alt="BhojRaj Pandit"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                <h3 className="text-white text-xl md:text-2xl font-bold">BhojRaj Pandit</h3>
+                <p className="text-gray-200 mt-2 text-sm md:text-base">15+ Years of Service • 500+ Ceremonies</p>
+                <p className="text-gray-300 mt-1 text-xs md:text-sm">Dedicated to preserving Hindu traditions</p>
               </div>
             </div>
 
@@ -49,11 +56,11 @@ export default function About() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="absolute -top-6 -right-6 bg-white rounded-full shadow-2xl p-6"
+              className="absolute -top-4 -right-4 md:-top-6 md:-right-6 bg-white rounded-full shadow-2xl p-4 md:p-6"
             >
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-600">500+</div>
-                <div className="text-sm text-gray-600">Ceremonies</div>
+                <div className="text-3xl md:text-4xl font-bold text-orange-600">500+</div>
+                <div className="text-xs md:text-sm text-gray-600">Ceremonies</div>
               </div>
             </motion.div>
           </motion.div>

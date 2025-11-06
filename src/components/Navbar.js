@@ -130,15 +130,16 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed right-6 bottom-6 flex flex-col space-y-4 z-40">
+      {/* Floating Action Buttons - Positioned to avoid mobile menu overlap */}
+      <div className="fixed right-4 bottom-20 md:right-6 md:bottom-6 flex flex-col space-y-3 z-40">
         <motion.a
           href="tel:+1234567890"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-colors"
+          className="bg-green-500 text-white p-3 md:p-4 rounded-full shadow-lg hover:bg-green-600 transition-colors"
+          aria-label="Call us"
         >
-          <FaPhone size={24} />
+          <FaPhone className="w-5 h-5 md:w-6 md:h-6" />
         </motion.a>
         <motion.a
           href="https://wa.me/1234567890"
@@ -146,9 +147,10 @@ export default function Navbar() {
           rel="noopener noreferrer"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition-colors"
+          className="bg-green-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:bg-green-700 transition-colors"
+          aria-label="WhatsApp us"
         >
-          <FaWhatsapp size={24} />
+          <FaWhatsapp className="w-5 h-5 md:w-6 md:h-6" />
         </motion.a>
       </div>
     </nav>

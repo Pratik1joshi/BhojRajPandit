@@ -1,25 +1,26 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FaAward, FaBook, FaStar, FaHeart } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-bold mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
           >
-            About Pandit Ji
+            About BhojRaj Pandit
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-xl max-w-2xl mx-auto"
+            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
           >
             Dedicated to preserving and sharing Hindu traditions with devotion
           </motion.p>
@@ -27,12 +28,12 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content */}
-      <section className="py-16">
+      <section className="py-8 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">My Journey</h2>
-              <div className="prose prose-lg text-gray-600 space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 md:mb-6">My Journey</h2>
+              <div className="prose prose-lg text-gray-600 space-y-4 text-sm md:text-base">
                 <p>
                   With over 15 years of experience in performing Hindu religious ceremonies, I have dedicated my life to serving the spiritual needs of our community. My journey began at a traditional Gurukul where I studied Vedic scriptures, Sanskrit, and the intricate details of Hindu rituals.
                 </p>
@@ -44,9 +45,18 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center">
-                <span className="text-9xl opacity-30">🕉️</span>
+            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="/aboutimage.jpeg"
+                alt="BhojRaj Pandit - Experienced Hindu Priest"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                <h3 className="text-xl md:text-2xl font-bold">BhojRaj Pandit</h3>
+                <p className="text-sm md:text-base text-gray-200 mt-1">Vedic Scholar & Hindu Priest</p>
               </div>
             </div>
           </div>
