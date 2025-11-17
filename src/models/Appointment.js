@@ -16,17 +16,12 @@ const AppointmentSchema = new mongoose.Schema({
     required: [true, 'Please provide your phone number'],
   },
   service: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Service',
+    type: String,
     required: true,
   },
   date: {
     type: Date,
     required: [true, 'Please select a date'],
-  },
-  timeSlot: {
-    type: String,
-    required: [true, 'Please select a time slot'],
   },
   address: {
     type: String,
@@ -51,4 +46,9 @@ const AppointmentSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-export default mongoose.models.Appointment || mongoose.model('Appointment', AppointmentSchema);
+// Clear the cached model to ensure schema updates are applied
+if (mongoose.models.Appointment) {
+  delete mongoose.models.Appointment;
+}
+
+export default mongoose.model('Appointment', AppointmentSchema);

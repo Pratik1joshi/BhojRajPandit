@@ -13,8 +13,6 @@ export default function AdminServices() {
     title: '',
     description: '',
     category: 'puja',
-    price: '',
-    duration: '',
     requirements: '',
     benefits: '',
     featured: false,
@@ -41,7 +39,6 @@ export default function AdminServices() {
     
     const data = {
       ...formData,
-      price: Number(formData.price),
       requirements: formData.requirements.split('\n').filter(r => r.trim()),
       benefits: formData.benefits.split('\n').filter(b => b.trim()),
     };
@@ -68,8 +65,6 @@ export default function AdminServices() {
       title: service.title,
       description: service.description,
       category: service.category,
-      price: service.price.toString(),
-      duration: service.duration,
       requirements: service.requirements?.join('\n') || '',
       benefits: service.benefits?.join('\n') || '',
       featured: service.featured,
@@ -96,8 +91,6 @@ export default function AdminServices() {
       title: '',
       description: '',
       category: 'puja',
-      price: '',
-      duration: '',
       requirements: '',
       benefits: '',
       featured: false,
@@ -139,11 +132,7 @@ export default function AdminServices() {
                 </span>
               </div>
               <p className="text-sm text-gray-600 mb-4">{service.description.substring(0, 100)}...</p>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-2xl font-bold text-orange-600">₹{service.price}</span>
-                <span className="text-sm text-gray-500">{service.duration}</span>
-              </div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 mt-4">
                 <button
                   onClick={() => handleEdit(service)}
                   className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 flex items-center justify-center space-x-2"
@@ -190,43 +179,20 @@ export default function AdminServices() {
                   className="w-full px-4 py-2 border rounded-lg"
                 ></textarea>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium mb-2">Category *</label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg"
-                  >
-                    <option value="puja">Puja</option>
-                    <option value="bratabandhan">Bratabandhan</option>
-                    <option value="wedding">Wedding</option>
-                    <option value="housewarming">Housewarming</option>
-                    <option value="custom">Custom</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-medium mb-2">Price (₹) *</label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    required
-                    className="w-full px-4 py-2 border rounded-lg"
-                  />
-                </div>
-              </div>
               <div>
-                <label className="block font-medium mb-2">Duration *</label>
-                <input
-                  type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  required
-                  placeholder="e.g., 2-3 hours"
+                <label className="block font-medium mb-2">Category *</label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full px-4 py-2 border rounded-lg"
-                />
+                >
+                  <option value="puja">Puja</option>
+                  <option value="ceremony">Ceremony</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="housewarming">Housewarming</option>
+                  <option value="consultation">Consultation</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
               <div className="flex space-x-4">
                 <label className="flex items-center space-x-2">

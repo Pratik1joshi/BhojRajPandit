@@ -2,76 +2,13 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
-import { FaClock, FaRupeeSign } from 'react-icons/fa';
+import { services } from '@/data/services';
 
 export default function FeaturedServices() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
-
-  const services = [
-    {
-      id: 1,
-      title: 'Satyanarayan Puja',
-      category: 'puja',
-      description: 'Traditional worship for prosperity, success, and well-being of the family.',
-      duration: '2-3 hours',
-      price: '₹3,000',
-      icon: '🪔',
-      color: 'from-orange-400 to-red-500',
-    },
-    {
-      id: 2,
-      title: 'Bratabandhan Ceremony',
-      category: 'bratabandhan',
-      description: 'Sacred thread ceremony marking the beginning of spiritual education.',
-      duration: '4-5 hours',
-      price: '₹8,000',
-      icon: '📿',
-      color: 'from-yellow-400 to-orange-500',
-    },
-    {
-      id: 3,
-      title: 'Wedding Rituals',
-      category: 'wedding',
-      description: 'Complete Hindu wedding ceremony with all traditional rituals and customs.',
-      duration: 'Full Day',
-      price: '₹15,000',
-      icon: '💐',
-      color: 'from-pink-400 to-red-500',
-    },
-    {
-      id: 4,
-      title: 'Griha Pravesh',
-      category: 'housewarming',
-      description: 'Housewarming ceremony for blessings and positive energy in new home.',
-      duration: '2-3 hours',
-      price: '₹5,000',
-      icon: '🏠',
-      color: 'from-green-400 to-teal-500',
-    },
-    {
-      id: 5,
-      title: 'Navgraha Puja',
-      category: 'puja',
-      description: 'Worship of nine planets to remove obstacles and bring harmony.',
-      duration: '3-4 hours',
-      price: '₹4,500',
-      icon: '🌟',
-      color: 'from-purple-400 to-indigo-500',
-    },
-    {
-      id: 6,
-      title: 'Custom Puja',
-      category: 'custom',
-      description: 'Personalized ceremonies tailored to your specific needs and requirements.',
-      duration: 'Varies',
-      price: 'Custom',
-      icon: '✨',
-      color: 'from-blue-400 to-cyan-500',
-    },
-  ];
 
   return (
     <section ref={ref} className="py-20 bg-gradient-to-b from-orange-50 to-white">
@@ -117,17 +54,7 @@ export default function FeaturedServices() {
 
               {/* Content */}
               <div className="p-6">
-                <p className="text-gray-600 mb-4 line-clamp-2">{service.description}</p>
-
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <FaClock className="mr-2" />
-                    <span>{service.duration}</span>
-                  </div>
-                  <div className="flex items-center text-lg font-bold text-orange-600">
-                    <span>{service.price}</span>
-                  </div>
-                </div>
+                <p className="text-gray-600 mb-6 line-clamp-3">{service.description}</p>
 
                 <Link href="/appointment">
                   <button className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors group-hover:shadow-lg">

@@ -2,42 +2,13 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaStar } from 'react-icons/fa';
+import { testimonials } from '@/data/testimonials';
 
 export default function Testimonials() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
-
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Rajesh Kumar',
-      service: 'Wedding Ceremony',
-      rating: 5,
-      text: 'Pandit Ji conducted our wedding ceremony beautifully. Every ritual was explained and performed with utmost devotion. Highly recommended!',
-      location: 'Mumbai',
-      image: '👨',
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      service: 'Satyanarayan Puja',
-      rating: 5,
-      text: 'Very knowledgeable and professional. The puja was conducted perfectly, and we felt truly blessed. Thank you Pandit Ji!',
-      location: 'Delhi',
-      image: '👩',
-    },
-    {
-      id: 3,
-      name: 'Amit Patel',
-      service: 'Griha Pravesh',
-      rating: 5,
-      text: 'Excellent service! Pandit Ji made our housewarming ceremony memorable. Very punctual and thorough with all the rituals.',
-      location: 'Ahmedabad',
-      image: '👨',
-    },
-  ];
 
   return (
     <section ref={ref} className="py-20 bg-white">

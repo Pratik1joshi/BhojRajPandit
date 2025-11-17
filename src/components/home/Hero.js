@@ -1,29 +1,11 @@
 'use client';
-import { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-const HeroScene = dynamic(() => import('@/components/3d/HeroScene'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600"></div>
-    </div>
-  ),
-});
+import Image from 'next/image';
 
 export default function Hero() {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 via-white to-orange-100">
-      {/* 3D Background */}
-      <div className="absolute inset-0 z-0">
-        <HeroScene />
-      </div>
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/30 to-white/80 z-10"></div>
-
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -110,56 +92,91 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Decorative */}
+          {/* Right Content - Image with Glassy Effect */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="hidden md:block relative"
           >
-            <div className="relative w-full h-[500px]">
-              {/* Decorative elements */}
+            <div className="relative w-full h-[500px] group">
+              {/* Glassy container with watery hover effect */}
               <motion.div
-                animate={{
-                  y: [0, -20, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-10 right-10 bg-orange-200 rounded-full p-8"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl"
               >
-                <span className="text-6xl">🪔</span>
+                {/* Watery ripple effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-transparent to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute inset-0 bg-gradient-radial from-white/40 via-transparent to-transparent blur-xl"
+                  />
+                </div>
+
+                {/* Glass morphism overlay */}
+                <div className="absolute inset-0 backdrop-blur-[2px] bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                
+                {/* Border glow effect */}
+                <div className="absolute inset-0 rounded-3xl border-2 border-white/20 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_30px_rgba(251,146,60,0.5)] transition-all duration-500 z-10" />
+
+                {/* Image - Replace with your actual image */}
+                <div className="relative w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                  {/* Placeholder - Replace this with your image */}
+                  {/* <div className="text-center">
+                    <span className="text-9xl mb-4 block filter drop-shadow-lg">🕉️</span>
+                    <p className="text-orange-800 font-semibold text-lg">Add your image here</p>
+                    <p className="text-orange-600 text-sm mt-2">Path: /public/images/pandit-hero.jpg</p>
+                  </div> */}
+                  
+                  {/* Uncomment and use this when you have an image */}
+                  <Image
+                    src="/images/bhojrajhero.jpg"
+                    alt="BhojRaj Pandit"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+
+                {/* Floating particles effect */}
+                <motion.div
+                  animate={{
+                    y: [0, -20, 0],
+                    x: [0, 10, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute top-10 right-10 w-16 h-16 bg-orange-300/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <motion.div
+                  animate={{
+                    y: [0, 20, 0],
+                    x: [0, -10, 0],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5,
+                  }}
+                  className="absolute bottom-10 left-10 w-20 h-20 bg-blue-300/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
               </motion.div>
-              <motion.div
-                animate={{
-                  y: [0, 20, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.5,
-                }}
-                className="absolute bottom-20 left-10 bg-yellow-200 rounded-full p-6"
-              >
-                <span className="text-5xl">📿</span>
-              </motion.div>
-              <motion.div
-                animate={{
-                  y: [0, -15, 0],
-                }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-200 rounded-full p-10"
-              >
-                <span className="text-7xl">🙏</span>
-              </motion.div>
+
+              {/* Reflection effect */}
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 h-8 bg-gradient-to-b from-orange-200/40 to-transparent blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -8,8 +8,23 @@ import { FaUser, FaLock } from 'react-icons/fa';
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/admin/dashboard');
+    }
+  }, [status, router]);
+
+  if (status === 'loading' || status === 'authenticated') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600"></div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

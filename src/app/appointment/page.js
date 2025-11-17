@@ -4,13 +4,13 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useSearchParams } from 'next/navigation';
-import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCommentDots } from 'react-icons/fa';
+import { FaCalendarAlt, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCommentDots } from 'react-icons/fa';
+import { services } from '@/data/services';
 
 function AppointmentForm() {
   const searchParams = useSearchParams();
   const preselectedService = searchParams.get('service');
 
-  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -18,40 +18,16 @@ function AppointmentForm() {
     phone: '',
     service: preselectedService || '',
     date: '',
-    timeSlot: '',
     address: '',
     city: '',
     message: '',
   });
-
-  const timeSlots = [
-    '06:00 AM - 08:00 AM',
-    '08:00 AM - 10:00 AM',
-    '10:00 AM - 12:00 PM',
-    '12:00 PM - 02:00 PM',
-    '02:00 PM - 04:00 PM',
-    '04:00 PM - 06:00 PM',
-    '06:00 PM - 08:00 PM',
-  ];
-
-  useEffect(() => {
-    fetchServices();
-  }, []);
 
   useEffect(() => {
     if (preselectedService) {
       setFormData(prev => ({ ...prev, service: preselectedService }));
     }
   }, [preselectedService]);
-
-  const fetchServices = async () => {
-    try {
-      const response = await axios.get('/api/services');
-      setServices(response.data.data);
-    } catch (error) {
-      toast.error('Failed to load services');
-    }
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,7 +46,6 @@ function AppointmentForm() {
         phone: '',
         service: '',
         date: '',
-        timeSlot: '',
         address: '',
         city: '',
         message: '',
@@ -189,7 +164,7 @@ function AppointmentForm() {
                   Service Details
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="md:col-span-2">
+                  <div className="md:col-span-2 text-gray-500">
                     <label className="block text-gray-700 font-medium mb-2">
                       Select Service *
                     </label>
@@ -202,13 +177,13 @@ function AppointmentForm() {
                     >
                       <option value="">Choose a service...</option>
                       {services.map((service) => (
-                        <option key={service._id} value={service._id}>
-                          {service.title} - ₹{service.price} ({service.duration})
+                        <option key={service.id} value={service.id}>
+                          {service.title}
                         </option>
                       ))}
                     </select>
                   </div>
-                  <div>
+                  <div className="md:col-span-2 text-gray-500">
                     <label className="block text-gray-700 font-medium mb-2">
                       Preferred Date *
                     </label>
@@ -221,25 +196,6 @@ function AppointmentForm() {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Preferred Time Slot *
-                    </label>
-                    <select
-                      name="timeSlot"
-                      value={formData.timeSlot}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent"
-                    >
-                      <option value="">Choose a time slot...</option>
-                      {timeSlots.map((slot) => (
-                        <option key={slot} value={slot}>
-                          {slot}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                 </div>
               </div>

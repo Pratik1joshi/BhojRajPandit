@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
@@ -9,12 +9,18 @@ import { FaCalendarAlt, FaCog, FaImages, FaComments, FaSignOutAlt, FaHome, FaUse
 export default function AdminLayout({ children }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (status === 'unauthenticated' && pathname !== '/admin/login' && pathname !== '/admin') {
       router.push('/admin/login');
     }
-  }, [status, router]);
+  }, [status, router, pathname]);
+  
+  // Don't apply admin layout to login page
+  if (pathname === '/admin/login' || pathname === '/admin') {
+    return <>{children}</>;
+  }
 
   if (status === 'loading') {
     return (

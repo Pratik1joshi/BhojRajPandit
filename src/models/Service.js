@@ -13,15 +13,7 @@ const ServiceSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['puja', 'bratabandhan', 'wedding', 'housewarming', 'custom', 'other'],
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  duration: {
-    type: String,
-    required: true,
+    enum: ['puja', 'ceremony', 'wedding', 'housewarming', 'consultation', 'other'],
   },
   image: {
     type: String,

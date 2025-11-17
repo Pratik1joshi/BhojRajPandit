@@ -1,7 +1,22 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
+const path = require('path');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pandit-portfolio';
+// Read .env.local to get MONGODB_URI
+function getMongoUri() {
+  const envPath = path.join(__dirname, '..', '.env.local');
+  try {
+    const env = fs.readFileSync(envPath, 'utf8');
+    const match = env.match(/MONGODB_URI=(.*)/);
+    if (match && match[1]) return match[1].trim();
+  } catch (e) {
+    // ignore
+  }
+  return process.env.MONGODB_URI || 'mongodb://localhost:27017/pandit-portfolio';
+}
+
+const MONGODB_URI = getMongoUri();
 
 async function createAdmin() {
   try {

@@ -1,50 +1,26 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
-import { FaClock, FaFilter } from 'react-icons/fa';
+import { FaFilter } from 'react-icons/fa';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
+import { services, getServicesByCategory } from '@/data/services';
 
 export default function ServicesPage() {
-  const [services, setServices] = useState([]);
-  const [filteredServices, setFilteredServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState(services);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [loading, setLoading] = useState(true);
 
   const categories = [
     { value: 'all', label: 'All Services' },
     { value: 'puja', label: 'Puja Services' },
-    { value: 'bratabandhan', label: 'Bratabandhan' },
+    { value: 'ceremony', label: 'Ceremonies' },
     { value: 'wedding', label: 'Wedding Rituals' },
     { value: 'housewarming', label: 'Housewarming' },
-    { value: 'custom', label: 'Custom Services' },
-    { value: 'other', label: 'Other' },
+    { value: 'consultation', label: 'Consultation' },
   ];
 
   useEffect(() => {
-    fetchServices();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredServices(services);
-    } else {
-      setFilteredServices(services.filter(s => s.category === selectedCategory));
-    }
-  }, [selectedCategory, services]);
-
-  const fetchServices = async () => {
-    try {
-      const response = await axios.get('/api/services');
-      setServices(response.data.data);
-      setFilteredServices(response.data.data);
-    } catch (error) {
-      toast.error('Failed to load services');
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFilteredServices(getServicesByCategory(selectedCategory));
+  }, [selectedCategory]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
@@ -94,11 +70,7 @@ export default function ServicesPage() {
       {/* Services Grid */}
       <section className="py-8 md:py-16 pb-24 md:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="text-center py-20">
-              <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600"></div>
-            </div>
-          ) : filteredServices.length === 0 ? (
+          {filteredServices.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-2xl text-gray-600">No services found in this category</p>
             </div>
@@ -106,15 +78,15 @@ export default function ServicesPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredServices.map((service, index) => (
                 <motion.div
-                  key={service._id}
+                  key={service.id}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow"
                 >
                   {/* Image */}
-                  <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-6xl">
-                    🪔
+                  <div className={`h-48 bg-gradient-to-br ${service.color} flex items-center justify-center text-6xl`}>
+                    {service.icon}
                   </div>
 
                   {/* Content */}
@@ -123,33 +95,10 @@ export default function ServicesPage() {
                       {service.category}
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    {/* Details */}
-                    <div className="flex items-center justify-between mb-4 pb-4 border-b">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <FaClock className="mr-2" />
-                        <span>{service.duration}</span>
-                      </div>
-                      <div className="text-2xl font-bold text-orange-600">
-                        ₹{service.price}
-                      </div>
-                    </div>
-
-                    {/* Requirements */}
-                    {service.requirements && service.requirements.length > 0 && (
-                      <div className="mb-4">
-                        <h4 className="font-semibold text-gray-900 mb-2">Requirements:</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          {service.requirements.slice(0, 3).map((req, idx) => (
-                            <li key={idx}>• {req}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    <p className="text-gray-600 mb-6">{service.description}</p>
 
                     {/* Book Button */}
-                    <Link href={`/appointment?service=${service._id}`}>
+                    <Link href={`/appointment?service=${service.id}`}>
                       <button className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
                         Book This Service
                       </button>
