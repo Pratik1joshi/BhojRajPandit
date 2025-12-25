@@ -147,7 +147,7 @@ export default function Hero() {
                 {/* Image */}
                 <div className="relative w-full h-full bg-gradient-to-br from-orange-50 to-orange-100">
                   <Image
-                    src={profile.profileImage || '/images/bhojrajhero.jpg'}
+                    src={profile.coverImage || profile.profileImage || '/images/bhojrajhero.jpg'}
                     alt={profile.name}
                     fill
                     className="object-cover"

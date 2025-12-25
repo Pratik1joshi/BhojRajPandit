@@ -22,6 +22,7 @@ export default function AdminProfile() {
     languages: [],
     certifications: [],
     profileImage: '',
+    coverImage: '',
     socialMedia: {
       facebook: '',
       instagram: '',
@@ -30,6 +31,7 @@ export default function AdminProfile() {
   });
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
   const [newSpecialization, setNewSpecialization] = useState('');
   const [newLanguage, setNewLanguage] = useState('');
   const [newCertification, setNewCertification] = useState({ name: '', institution: '', year: '' });
@@ -99,6 +101,47 @@ export default function AdminProfile() {
       toast.error('Failed to upload image');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleCoverImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size should be less than 5MB');
+      return;
+    }
+
+    setUploadingCover(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (data.secure_url) {
+        setProfile({ ...profile, coverImage: data.secure_url });
+        toast.success('Cover image uploaded successfully');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload cover image');
+    } finally {
+      setUploadingCover(false);
     }
   };
 
@@ -282,7 +325,7 @@ export default function AdminProfile() {
 
           {/* Profile Image */}
           <div>
-            <label className="block font-medium mb-2">Profile Image</label>
+            <label className="block font-medium mb-2">Profile Image (About Section)</label>
             <div className="flex items-center gap-4">
               {profile.profileImage && (
                 <img
@@ -314,6 +357,45 @@ export default function AdminProfile() {
                   onChange={(e) => setProfile({ ...profile, profileImage: e.target.value })}
                   className="w-full px-4 py-2 border rounded-lg mt-1"
                   placeholder="https://example.com/image.jpg"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Cover/Hero Image */}
+          <div>
+            <label className="block font-medium mb-2">Hero Image (Homepage)</label>
+            <div className="flex items-center gap-4">
+              {profile.coverImage && (
+                <img
+                  src={profile.coverImage}
+                  alt="Hero"
+                  className="w-24 h-24 object-cover rounded-lg"
+                />
+              )}
+              <div className="flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverImageUpload}
+                  className="hidden"
+                  id="coverImage"
+                  disabled={uploadingCover}
+                />
+                <label
+                  htmlFor="coverImage"
+                  className={`inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 ${uploadingCover ? 'opacity-50' : ''}`}
+                >
+                  <FaUpload />
+                  {uploadingCover ? 'Uploading...' : 'Upload Hero Image'}
+                </label>
+                <p className="text-sm text-gray-500 mt-2">Or enter image URL:</p>
+                <input
+                  type="text"
+                  value={profile.coverImage || ''}
+                  onChange={(e) => setProfile({ ...profile, coverImage: e.target.value })}
+                  className="w-full px-4 py-2 border rounded-lg mt-1"
+                  placeholder="https://example.com/hero-image.jpg"
                 />
               </div>
             </div>
