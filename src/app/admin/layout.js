@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { FaCalendarAlt, FaCog, FaImages, FaComments, FaSignOutAlt, FaHome, FaUsers } from 'react-icons/fa';
+import { FaCalendarAlt, FaCog, FaImages, FaComments, FaSignOutAlt, FaHome, FaUsers, FaLock } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
   const { data: session, status } = useSession();
@@ -39,6 +39,7 @@ export default function AdminLayout({ children }) {
     { icon: FaImages, label: 'Gallery', href: '/admin/gallery' },
     { icon: FaComments, label: 'Testimonials', href: '/admin/testimonials' },
     { icon: FaUsers, label: 'Profile', href: '/admin/profile' },
+    { icon: FaLock, label: 'Settings', href: '/admin/settings' },
   ];
 
   return (

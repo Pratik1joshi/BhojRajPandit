@@ -5,10 +5,11 @@ import Testimonial from '@/models/Testimonial';
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
     const body = await request.json();
     const testimonial = await Testimonial.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -32,8 +33,9 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const testimonial = await Testimonial.findByIdAndDelete(params.id);
+    const testimonial = await Testimonial.findByIdAndDelete(id);
     
     if (!testimonial) {
       return NextResponse.json(

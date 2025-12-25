@@ -29,8 +29,8 @@ export default function Navbar() {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg'
-          : 'bg-gradient-to-b from-black/60 to-transparent backdrop-blur-sm'
+          ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-100'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,14 +40,14 @@ export default function Navbar() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-3"
             >
-              <div className="text-3xl">🕉️</div>
+              <div className="text-2xl">🕉️</div>
               <div>
-                <h1 className={`text-2xl font-bold transition-all ${scrolled ? 'text-orange-600' : 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
+                <h1 className={`text-xl font-semibold transition-all ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}>
                   Pandit Ji
                 </h1>
-                <p className={`text-xs transition-all ${scrolled ? 'text-gray-600' : 'text-gray-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'}`}>
+                <p className={`text-xs transition-all ${scrolled ? 'text-gray-500' : 'text-gray-600'}`}>
                   Religious Services
                 </p>
               </div>
@@ -55,20 +55,20 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link, index) => (
               <motion.div
                 key={link.name}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.05 }}
               >
                 <Link
                   href={link.href}
-                  className={`font-medium transition-colors ${
+                  className={`px-4 py-2 font-medium text-sm transition-colors rounded-lg ${
                     scrolled
-                      ? 'text-gray-700 hover:text-orange-600'
-                      : 'text-white hover:text-orange-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'
+                      ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 hover:text-gray-900 hover:bg-white/50'
                   }`}
                 >
                   {link.name}
@@ -79,11 +79,11 @@ export default function Navbar() {
               <motion.button
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-orange-600 text-white px-6 py-2 rounded-full font-medium hover:bg-orange-700 transition-colors shadow-lg"
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                className="ml-4 bg-orange-800 text-white px-6 py-2.5 rounded-lg font-medium text-sm hover:bg-orange-900 transition-all shadow-sm"
               >
-                Book Appointment
+                Book Now
               </motion.button>
             </Link>
           </div>
@@ -92,7 +92,7 @@ export default function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden p-2 rounded-lg ${
-              scrolled ? 'text-gray-700' : 'text-white'
+              scrolled ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-700 hover:bg-white/50'
             }`}
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}

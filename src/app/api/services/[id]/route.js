@@ -5,8 +5,9 @@ import Service from '@/models/Service';
 export async function GET(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const service = await Service.findById(params.id);
+    const service = await Service.findById(id);
     
     if (!service) {
       return NextResponse.json(
@@ -27,10 +28,11 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
     const body = await request.json();
     const service = await Service.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -54,8 +56,9 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const service = await Service.findByIdAndDelete(params.id);
+    const service = await Service.findByIdAndDelete(id);
     
     if (!service) {
       return NextResponse.json(

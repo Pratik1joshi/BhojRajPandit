@@ -5,10 +5,11 @@ import Gallery from '@/models/Gallery';
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
     const body = await request.json();
     const galleryItem = await Gallery.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -32,8 +33,9 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const galleryItem = await Gallery.findByIdAndDelete(params.id);
+    const galleryItem = await Gallery.findByIdAndDelete(id);
     
     if (!galleryItem) {
       return NextResponse.json(

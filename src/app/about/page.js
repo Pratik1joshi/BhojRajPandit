@@ -1,9 +1,36 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaAward, FaBook, FaStar, FaHeart } from 'react-icons/fa';
 import Image from 'next/image';
+import axios from 'axios';
 
 export default function AboutPage() {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await axios.get('/api/profile');
+      if (data.success && data.data) {
+        setProfile(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
       {/* Hero */}
@@ -14,7 +41,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
           >
-            About BhojRaj Pandit
+            About {profile.name}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -22,7 +49,7 @@ export default function AboutPage() {
             transition={{ delay: 0.1 }}
             className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
           >
-            Dedicated to preserving and sharing Hindu traditions with devotion
+            {profile.title || 'Dedicated to preserving and sharing Hindu traditions with devotion'}
           </motion.p>
         </div>
       </section>
@@ -34,29 +61,35 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 md:mb-6">My Journey</h2>
               <div className="prose prose-lg text-gray-600 space-y-4 text-sm md:text-base">
-                <p>
-                  With over 15 years of experience in performing Hindu religious ceremonies, I have dedicated my life to serving the spiritual needs of our community. My journey began at a traditional Gurukul where I studied Vedic scriptures, Sanskrit, and the intricate details of Hindu rituals.
-                </p>
-                <p>
-                  I believe that every ceremony is not just a ritual but a sacred connection between individuals, their families, and the divine. My approach combines traditional authenticity with modern understanding, ensuring that each ceremony resonates with both the elders and the younger generation.
-                </p>
-                <p>
-                  Having performed over 500 ceremonies, from simple home pujas to elaborate wedding rituals, I take pride in making each occasion memorable and spiritually meaningful. My goal is to preserve our rich cultural heritage while making it accessible and relevant to today's families.
-                </p>
+                {profile.bio ? (
+                  <p className="whitespace-pre-wrap">{profile.bio}</p>
+                ) : (
+                  <>
+                    <p>
+                      With over {profile.experience} years of experience in performing Hindu religious ceremonies, I have dedicated my life to serving the spiritual needs of our community. My journey began at a traditional Gurukul where I studied Vedic scriptures, Sanskrit, and the intricate details of Hindu rituals.
+                    </p>
+                    <p>
+                      I believe that every ceremony is not just a ritual but a sacred connection between individuals, their families, and the divine. My approach combines traditional authenticity with modern understanding, ensuring that each ceremony resonates with both the elders and the younger generation.
+                    </p>
+                    <p>
+                      Having performed over {profile.ceremoniesCompleted || 500} ceremonies, from simple home pujas to elaborate wedding rituals, I take pride in making each occasion memorable and spiritually meaningful. My goal is to preserve our rich cultural heritage while making it accessible and relevant to today's families.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
             <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/aboutimage.jpeg"
-                alt="BhojRaj Pandit - Experienced Hindu Priest"
+                src={profile.profileImage || '/aboutimage.jpeg'}
+                alt={`${profile.name} - Experienced Hindu Priest`}
                 fill
                 className="object-cover"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-                <h3 className="text-xl md:text-2xl font-bold">BhojRaj Pandit</h3>
-                <p className="text-sm md:text-base text-gray-200 mt-1">Vedic Scholar & Hindu Priest</p>
+                <h3 className="text-xl md:text-2xl font-bold">{profile.name}</h3>
+                <p className="text-sm md:text-base text-gray-200 mt-1">{profile.title || 'Vedic Scholar & Hindu Priest'}</p>
               </div>
             </div>
           </div>
@@ -64,9 +97,9 @@ export default function AboutPage() {
           {/* Stats */}
           <div className="grid md:grid-cols-4 gap-8 mb-16">
             {[
-              { icon: FaAward, number: '15+', label: 'Years Experience' },
-              { icon: FaBook, number: '500+', label: 'Ceremonies' },
-              { icon: FaStar, number: '300+', label: 'Happy Clients' },
+              { icon: FaAward, number: `${profile.experience}+`, label: 'Years Experience' },
+              { icon: FaBook, number: `${profile.ceremoniesCompleted || 500}+`, label: 'Ceremonies' },
+              { icon: FaStar, number: `${profile.happyClients || 300}+`, label: 'Happy Clients' },
               { icon: FaHeart, number: '100%', label: 'Dedication' },
             ].map((stat, index) => (
               <motion.div

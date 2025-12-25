@@ -2,17 +2,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaUpload } from 'react-icons/fa';
 
 export default function AdminServices() {
   const [services, setServices] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: 'puja',
+    image: '',
     requirements: '',
     benefits: '',
     featured: false,
@@ -65,6 +67,7 @@ export default function AdminServices() {
       title: service.title,
       description: service.description,
       category: service.category,
+      image: service.image || '',
       requirements: service.requirements?.join('\n') || '',
       benefits: service.benefits?.join('\n') || '',
       featured: service.featured,
@@ -90,12 +93,62 @@ export default function AdminServices() {
     setFormData({
       title: '',
       description: '',
+      image: '',
       category: 'puja',
       requirements: '',
       benefits: '',
       featured: false,
       isActive: true,
     });
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be less than 5MB');
+      return;
+    }
+
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!cloudName || !uploadPreset) {
+      toast.error('Cloudinary not configured. Please update .env.local file');
+      return;
+    }
+
+    setUploading(true);
+    const formDataObj = new FormData();
+    formDataObj.append('file', file);
+    formDataObj.append('upload_preset', uploadPreset);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: 'POST',
+          body: formDataObj,
+        }
+      );
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('Cloudinary error:', data);
+        toast.error(data.error?.message || 'Upload failed. Check your upload preset is set to "Unsigned"');
+        return;
+      }
+      
+      setFormData({ ...formData, image: data.secure_url });
+      toast.success('Image uploaded successfully');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -121,8 +174,19 @@ export default function AdminServices() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((service) => (
           <div key={service._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="h-32 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-5xl">
-              🪔
+            {/* Service Image */}
+            <div className="relative h-48 bg-gradient-to-br from-orange-400 to-red-500">
+              {service.image ? (
+                <img 
+                  src={service.image} 
+                  alt={service.title} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-5xl">
+                  🪔
+                </div>
+              )}
             </div>
             <div className="p-6">
               <div className="flex justify-between items-start mb-2">
@@ -179,6 +243,61 @@ export default function AdminServices() {
                   className="w-full px-4 py-2 border rounded-lg"
                 ></textarea>
               </div>
+              
+              <div>
+                <label className="block font-medium mb-2">Service Image</label>
+                <div className="space-y-3">
+                  {/* File Upload */}
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className={`flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg cursor-pointer hover:bg-orange-700 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <FaUpload />
+                      <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
+                    </label>
+                    <span className="text-sm text-gray-500">or</span>
+                    <input
+                      type="url"
+                      value={formData.image || ''}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      placeholder="Paste image URL"
+                      className="flex-1 px-4 py-2 border rounded-lg text-sm"
+                    />
+                  </div>
+                  
+                  {/* Image Preview */}
+                  {formData.image && (
+                    <div className="relative">
+                      <img 
+                        src={formData.image} 
+                        alt="Preview" 
+                        className="w-full h-48 object-cover rounded-lg border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image: '' })}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                      >
+                        <FaTrash size={12} />
+                      </button>
+                    </div>
+                  )}
+                  
+                  <p className="text-xs text-gray-500">
+                    Upload from your device or paste an image URL (Max 5MB)
+                  </p>
+                </div>
+              </div>
+              
               <div>
                 <label className="block font-medium mb-2">Category *</label>
                 <select

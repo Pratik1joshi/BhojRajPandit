@@ -5,8 +5,9 @@ import Appointment from '@/models/Appointment';
 export async function GET(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const appointment = await Appointment.findById(params.id).populate('service');
+    const appointment = await Appointment.findById(id).populate('service');
     
     if (!appointment) {
       return NextResponse.json(
@@ -27,10 +28,11 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
     const body = await request.json();
     const appointment = await Appointment.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     ).populate('service');
@@ -54,8 +56,9 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
+    const { id } = await params;
     
-    const appointment = await Appointment.findByIdAndDelete(params.id);
+    const appointment = await Appointment.findByIdAndDelete(id);
     
     if (!appointment) {
       return NextResponse.json(

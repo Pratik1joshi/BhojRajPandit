@@ -1,7 +1,9 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Image from 'next/image';
+import axios from 'axios';
 
 export default function About() {
   const [ref, inView] = useInView({
@@ -9,13 +11,40 @@ export default function About() {
     threshold: 0.1,
   });
 
-  const certifications = [
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await axios.get('/api/profile');
+      if (data.success && data.data) {
+        setProfile(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  if (!profile) {
+    return (
+      <section ref={ref} className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center text-xl">Loading...</div>
+        </div>
+      </section>
+    );
+  }
+
+  const certifications = profile.certifications || [
     { name: 'Vedic Studies', institution: 'Sanskrit University', year: 2005 },
     { name: 'Purohit Certification', institution: 'Hindu Dharma Institute', year: 2008 },
     { name: 'Advanced Rituals', institution: 'Traditional Gurukul', year: 2010 },
   ];
 
-  const specializations = [
+  const specializations = profile.specializations || [
     'Vedic Pujas',
     'Wedding Ceremonies',
     'Bratabandhan',
@@ -38,17 +67,17 @@ export default function About() {
             <div className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
               {/* Pandit Image */}
               <Image
-                src="/aboutimage.jpeg"
-                alt="BhojRaj Pandit"
+                src={profile.profileImage || '/aboutimage.jpeg'}
+                alt={profile.name}
                 fill
                 className="object-cover"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <h3 className="text-white text-xl md:text-2xl font-bold">BhojRaj Pandit</h3>
-                <p className="text-gray-200 mt-2 text-sm md:text-base">15+ Years of Service • 500+ Ceremonies</p>
-                <p className="text-gray-300 mt-1 text-xs md:text-sm">Dedicated to preserving Hindu traditions</p>
+                <h3 className="text-white text-xl md:text-2xl font-bold">{profile.name}</h3>
+                <p className="text-gray-200 mt-2 text-sm md:text-base">{profile.experience}+ Years of Service • {profile.ceremoniesCompleted || 500}+ Ceremonies</p>
+                <p className="text-gray-300 mt-1 text-xs md:text-sm">{profile.title || 'Dedicated to preserving Hindu traditions'}</p>
               </div>
             </div>
 
@@ -59,7 +88,7 @@ export default function About() {
               className="absolute -top-4 -right-4 md:-top-6 md:-right-6 bg-white rounded-full shadow-2xl p-4 md:p-6"
             >
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-orange-600">500+</div>
+                <div className="text-3xl md:text-4xl font-bold text-orange-600">{profile.ceremoniesCompleted || 500}+</div>
                 <div className="text-xs md:text-sm text-gray-600">Ceremonies</div>
               </div>
             </motion.div>
@@ -81,9 +110,7 @@ export default function About() {
             </h2>
 
             <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-              With over 15 years of experience in performing traditional Hindu ceremonies, 
-              I am dedicated to helping families celebrate their most important moments with 
-              authenticity and spiritual significance.
+              {profile.bio ? profile.bio.substring(0, 200) + (profile.bio.length > 200 ? '...' : '') : `With over ${profile.experience} years of experience in performing traditional Hindu ceremonies, I am dedicated to helping families celebrate their most important moments with authenticity and spiritual significance.`}
             </p>
 
             <p className="text-gray-600 mb-8 leading-relaxed">

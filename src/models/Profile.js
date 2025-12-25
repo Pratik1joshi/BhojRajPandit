@@ -37,6 +37,14 @@ const ProfileSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  ceremoniesCompleted: {
+    type: Number,
+    default: 0,
+  },
+  happyClients: {
+    type: Number,
+    default: 0,
+  },
   specializations: [{
     type: String,
   }],

@@ -1,47 +1,82 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import axios from 'axios';
 
 export default function Hero() {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await axios.get('/api/profile');
+      if (data.success && data.data) {
+        setProfile(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  if (!profile) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 via-white to-orange-100">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, #c2410c 1px, transparent 0)',
+        backgroundSize: '40px 40px'
+      }} />
+      
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             className="text-center md:text-left"
           >
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-block bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-semibold mb-6"
+              className="inline-flex items-center gap-2 bg-orange-50 text-orange-900 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-orange-100"
             >
-              🕉️ Authentic Hindu Rituals
+              <span className="text-lg">🕉️</span>
+              <span>Traditional Hindu Ceremonies</span>
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight"
             >
-              <span className="text-orange-600">BhojRaj</span> Pandit
+              {profile.name.split(' ')[0]}<br/>
+              <span className="text-orange-800">{profile.name.split(' ').slice(1).join(' ')}</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 leading-relaxed"
+              className="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg"
             >
-              Experienced religious consultant offering traditional Hindu ceremonies, 
-              pujas, and spiritual guidance with authenticity and devotion.
+              {profile.bio || `Preserving sacred traditions with ${profile.experience}+ years of experience in authentic Hindu rituals, pujas, and spiritual ceremonies.`}
             </motion.p>
 
             <motion.div
@@ -52,18 +87,18 @@ export default function Hero() {
             >
               <Link href="/appointment">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-xl"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-orange-800 text-white px-8 py-4 rounded-lg text-base font-medium hover:bg-orange-900 transition-all shadow-sm hover:shadow-md"
                 >
                   Book Appointment
                 </motion.button>
               </Link>
               <Link href="/services">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-white text-orange-600 border-2 border-orange-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-orange-50 transition-colors shadow-xl"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-white text-orange-800 border border-gray-200 px-8 py-4 rounded-lg text-base font-medium hover:border-orange-800 transition-all shadow-sm hover:shadow-md"
                 >
                   View Services
                 </motion.button>
@@ -72,143 +107,61 @@ export default function Hero() {
 
             {/* Stats */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="grid grid-cols-3 gap-3 sm:gap-6 mt-8 sm:mt-12"
+              className="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-gray-100"
             >
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">15+</div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">Years Experience</div>
+              <div>
+                <div className="text-4xl font-bold text-gray-900 mb-1">{profile.experience}+</div>
+                <div className="text-sm text-gray-500">Years</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">500+</div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">Ceremonies</div>
+              <div>
+                <div className="text-4xl font-bold text-gray-900 mb-1">{profile.ceremoniesCompleted || 500}+</div>
+                <div className="text-sm text-gray-500">Ceremonies</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600">300+</div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">Happy Clients</div>
+              <div>
+                <div className="text-4xl font-bold text-gray-900 mb-1">{profile.happyClients || 300}+</div>
+                <div className="text-sm text-gray-500">Families</div>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Image with Glassy Effect */}
+          {/* Right Content - Image */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             className="hidden md:block relative"
           >
-            <div className="relative w-full h-[500px] group">
-              {/* Glassy container with watery hover effect */}
+            <div className="relative w-full h-[600px] group">
+              {/* Image container */}
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl"
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3 }}
+                className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-orange-900/10"
               >
-                {/* Watery ripple effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-transparent to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute inset-0 bg-gradient-radial from-white/40 via-transparent to-transparent blur-xl"
-                  />
-                </div>
-
-                {/* Glass morphism overlay */}
-                <div className="absolute inset-0 backdrop-blur-[2px] bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                {/* Border accent */}
+                <div className="absolute inset-0 rounded-2xl border border-gray-100 z-10 pointer-events-none" />
                 
-                {/* Border glow effect */}
-                <div className="absolute inset-0 rounded-3xl border-2 border-white/20 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_30px_rgba(251,146,60,0.5)] transition-all duration-500 z-10" />
-
-                {/* Image - Replace with your actual image */}
-                <div className="relative w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                  {/* Placeholder - Replace this with your image */}
-                  {/* <div className="text-center">
-                    <span className="text-9xl mb-4 block filter drop-shadow-lg">🕉️</span>
-                    <p className="text-orange-800 font-semibold text-lg">Add your image here</p>
-                    <p className="text-orange-600 text-sm mt-2">Path: /public/images/pandit-hero.jpg</p>
-                  </div> */}
-                  
-                  {/* Uncomment and use this when you have an image */}
+                {/* Image */}
+                <div className="relative w-full h-full bg-gradient-to-br from-orange-50 to-orange-100">
                   <Image
-                    src="/images/bhojrajhero.jpg"
-                    alt="BhojRaj Pandit"
+                    src={profile.profileImage || '/images/bhojrajhero.jpg'}
+                    alt={profile.name}
                     fill
                     className="object-cover"
                     priority
                   />
                 </div>
-
-                {/* Floating particles effect */}
-                <motion.div
-                  animate={{
-                    y: [0, -20, 0],
-                    x: [0, 10, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute top-10 right-10 w-16 h-16 bg-orange-300/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <motion.div
-                  animate={{
-                    y: [0, 20, 0],
-                    x: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 3.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5,
-                  }}
-                  className="absolute bottom-10 left-10 w-20 h-20 bg-blue-300/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                />
               </motion.div>
 
-              {/* Reflection effect */}
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 h-8 bg-gradient-to-b from-orange-200/40 to-transparent blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Decorative element */}
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-orange-100 rounded-2xl -z-10" />
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="text-orange-600"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </motion.div>
-      </motion.div>
     </div>
   );
 }
