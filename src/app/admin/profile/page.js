@@ -330,15 +330,16 @@ export default function AdminProfile() {
                   onChange={(e) => setProfile({ ...profile, ceremoniesCompleted: parseInt(e.target.value) })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
-            </div>
-            <div>
-              <label className="block font-medium mb-2 text-gray-700 text-sm">Happy Clients</label>
-              <input
-                type="number"
-                value={profile.happyClients}
-                onChange={(e) => setProfile({ ...profile, happyClients: parseInt(e.target.value) })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
+              </div>
+              <div>
+                <label className="block font-medium mb-2 text-gray-700 text-sm">Happy Clients</label>
+                <input
+                  type="number"
+                  value={profile.happyClients}
+                  onChange={(e) => setProfile({ ...profile, happyClients: parseInt(e.target.value) })}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
             </div>
           </div>
 
