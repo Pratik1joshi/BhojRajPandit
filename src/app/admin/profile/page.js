@@ -373,7 +373,7 @@ export default function AdminProfile() {
                         }`}
                       >
                         <FaUpload className="text-orange-600" />
-                  {uploading ? 'Uploading...' : 'Upload Profile Image'}
+                        {uploading ? 'Uploading...' : 'Upload Profile Image'}
                       </label>
                     </div>
                     <div>
