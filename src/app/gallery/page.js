@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 export default function GalleryPage() {
   const [gallery, setGallery] = useState([]);
@@ -99,22 +100,40 @@ export default function GalleryPage() {
               <p className="text-2xl text-gray-600">No images in this category yet</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredGallery.map((item, index) => (
                 <motion.div
                   key={item._id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.05 }}
-                  className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow cursor-pointer"
+                  className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all cursor-pointer"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-6xl">
-                    🪔
-                  </div>
+                  {item.image ? (
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-5xl md:text-6xl">
+                      🪔
+                    </div>
+                  )}
+                  {item.featured && (
+                    <div className="absolute top-3 right-3 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-medium shadow-lg">
+                      Featured
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <h3 className="font-bold text-lg">{item.title}</h3>
-                      <p className="text-sm opacity-90">{item.category}</p>
+                      <h3 className="font-bold text-lg mb-1">{item.title}</h3>
+                      <p className="text-sm opacity-90 capitalize">{item.category}</p>
+                      {item.description && (
+                        <p className="text-xs opacity-80 mt-1 line-clamp-2">{item.description}</p>
+                      )}
                     </div>
                   </div>
                 </motion.div>

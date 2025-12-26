@@ -58,26 +58,28 @@ export default function AdminSettings() {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Security Settings</h1>
+    <div className="space-y-6 max-w-3xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Security Settings</h1>
+      </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl">
+      <div className="bg-white rounded-xl shadow-lg p-4 lg:p-8">
         <div className="flex items-center gap-3 mb-6">
           <FaLock className="text-2xl text-orange-600" />
-          <h2 className="text-2xl font-semibold">Change Password</h2>
+          <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">Change Password</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Current Password */}
           <div>
-            <label className="block font-medium mb-2">Current Password</label>
+            <label className="block font-medium mb-2 text-gray-700 text-sm">Current Password</label>
             <div className="relative">
               <input
                 type={showPasswords.current ? 'text' : 'password'}
                 value={passwords.currentPassword}
                 onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
                 required
-                className="w-full px-4 py-3 border rounded-lg pr-12"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg pr-12 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Enter current password"
               />
               <button
@@ -92,14 +94,14 @@ export default function AdminSettings() {
 
           {/* New Password */}
           <div>
-            <label className="block font-medium mb-2">New Password</label>
+            <label className="block font-medium mb-2 text-gray-700 text-sm">New Password</label>
             <div className="relative">
               <input
                 type={showPasswords.new ? 'text' : 'password'}
                 value={passwords.newPassword}
                 onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
                 required
-                className="w-full px-4 py-3 border rounded-lg pr-12"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg pr-12 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Enter new password (min 6 characters)"
               />
               <button
@@ -114,14 +116,14 @@ export default function AdminSettings() {
 
           {/* Confirm Password */}
           <div>
-            <label className="block font-medium mb-2">Confirm New Password</label>
+            <label className="block font-medium mb-2 text-gray-700 text-sm">Confirm New Password</label>
             <div className="relative">
               <input
                 type={showPasswords.confirm ? 'text' : 'password'}
                 value={passwords.confirmPassword}
                 onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
                 required
-                className="w-full px-4 py-3 border rounded-lg pr-12"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg pr-12 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Confirm new password"
               />
               <button

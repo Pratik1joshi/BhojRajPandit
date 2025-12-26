@@ -1,15 +1,16 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { FaCalendarAlt, FaCog, FaImages, FaComments, FaSignOutAlt, FaHome, FaUsers, FaLock } from 'react-icons/fa';
+import { FaCalendarAlt, FaCog, FaImages, FaComments, FaSignOutAlt, FaHome, FaUsers, FaLock, FaBars, FaTimes } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated' && pathname !== '/admin/login' && pathname !== '/admin') {
@@ -42,55 +43,112 @@ export default function AdminLayout({ children }) {
     { icon: FaLock, label: 'Settings', href: '/admin/settings' },
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white flex-shrink-0">
-        <div className="p-6">
-          <Link href="/admin/dashboard">
-            <div className="flex items-center space-x-2 mb-8">
-              <div className="text-3xl">🕉️</div>
-              <div>
-                <h1 className="text-xl font-bold">Pandit Admin</h1>
-                <p className="text-xs text-gray-400">Management Panel</p>
-              </div>
-            </div>
-          </Link>
+  const handleLinkClick = () => {
+    setSidebarOpen(false);
+  };
 
-          <nav className="space-y-2">
-            {menuItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <div className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
-                  <item.icon className="text-orange-500" />
-                  <span>{item.label}</span>
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
+        <div className="h-full flex flex-col">
+          {/* Logo & Close Button */}
+          <div className="p-6 border-b border-gray-700">
+            <div className="flex items-center justify-between mb-2">
+              <Link href="/admin/dashboard" onClick={handleLinkClick}>
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <div className="text-3xl">🕉️</div>
+                  <div>
+                    <h1 className="text-xl font-bold">Pandit Admin</h1>
+                    <p className="text-xs text-gray-400">Management Panel</p>
+                  </div>
                 </div>
               </Link>
-            ))}
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden text-gray-400 hover:text-white"
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link key={item.href} href={item.href} onClick={handleLinkClick}>
+                  <div
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-orange-600 text-white shadow-lg'
+                        : 'hover:bg-gray-700 text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    <item.icon className={isActive ? 'text-white' : 'text-orange-500'} size={18} />
+                    <span className="font-medium">{item.label}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Logout Button */}
+          <div className="p-4 border-t border-gray-700">
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-left"
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white"
             >
-              <FaSignOutAlt />
-              <span>Logout</span>
+              <FaSignOutAlt size={18} />
+              <span className="font-medium">Logout</span>
             </button>
-          </nav>
+          </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <header className="bg-white shadow-sm p-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-800">Welcome, {session.user.name}</h2>
-            <Link href="/" className="text-orange-600 hover:text-orange-700">
+        <header className="bg-white shadow-sm sticky top-0 z-30">
+          <div className="flex justify-between items-center px-4 lg:px-8 py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden text-gray-600 hover:text-gray-900"
+              >
+                <FaBars size={24} />
+              </button>
+              <div>
+                <h2 className="text-lg lg:text-xl font-semibold text-gray-800">
+                  Welcome, {session.user.name}
+                </h2>
+                <p className="text-xs text-gray-500 hidden sm:block">Manage your portfolio and services</p>
+              </div>
+            </div>
+            <Link
+              href="/"
+              className="text-sm lg:text-base text-orange-600 hover:text-orange-700 font-medium"
+            >
               View Website
             </Link>
           </div>
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-8 overflow-auto">
+        <main className="flex-1 p-4 lg:p-8 overflow-auto bg-gray-50">
           {children}
         </main>
       </div>

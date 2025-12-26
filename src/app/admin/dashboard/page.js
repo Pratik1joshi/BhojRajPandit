@@ -42,29 +42,29 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Overview of your admin panel</p>
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-600 mt-2 text-sm lg:text-base">Overview of your admin panel</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {statCards.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white rounded-xl shadow-lg p-6"
+            className="bg-white rounded-xl shadow-lg p-4 lg:p-6"
           >
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">{stat.label}</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+              <div className="min-w-0">
+                <p className="text-gray-600 text-xs lg:text-sm truncate">{stat.label}</p>
+                <p className="text-2xl lg:text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
               </div>
-              <div className={`${stat.color} p-4 rounded-full`}>
-                <stat.icon className="text-2xl text-white" />
+              <div className={`${stat.color} p-3 lg:p-4 rounded-full flex-shrink-0`}>
+                <stat.icon className="text-xl lg:text-2xl text-white" />
               </div>
             </div>
           </motion.div>
@@ -72,22 +72,22 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Appointments */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Recent Appointments</h2>
-          <Link href="/admin/appointments" className="text-orange-600 hover:text-orange-700 font-medium">
-            View All
+      <div className="bg-white rounded-xl shadow-lg p-4 lg:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+          <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Recent Appointments</h2>
+          <Link href="/admin/appointments" className="text-orange-600 hover:text-orange-700 font-medium text-sm lg:text-base">
+            View All →
           </Link>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-3 lg:space-y-4">
           {stats.recentAppointments.slice(0, 5).map((appointment) => (
-            <div key={appointment._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div>
-                <p className="font-semibold text-gray-900">{appointment.name}</p>
-                <p className="text-sm text-gray-600">{appointment.service?.title}</p>
-                <p className="text-xs text-gray-500">{new Date(appointment.date).toLocaleDateString()}</p>
+            <div key={appointment._id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 lg:p-4 bg-gray-50 rounded-lg">
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-gray-900 truncate">{appointment.name}</p>
+                <p className="text-sm text-gray-600 truncate">{appointment.service?.title}</p>
+                <p className="text-xs text-gray-500 mt-1">{new Date(appointment.date).toLocaleDateString()}</p>
               </div>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+              <span className={`px-3 py-1 rounded-full text-xs lg:text-sm font-medium self-start sm:self-auto ${
                 appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                 appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
                 appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
@@ -101,22 +101,22 @@ export default function AdminDashboard() {
       </div>
 
       {/* Upcoming Appointments */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Upcoming Appointments</h2>
-        <div className="space-y-4">
+      <div className="bg-white rounded-xl shadow-lg p-4 lg:p-6">
+        <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6">Upcoming Appointments</h2>
+        <div className="space-y-3 lg:space-y-4">
           {stats.upcomingAppointments.length === 0 ? (
-            <p className="text-gray-600">No upcoming appointments</p>
+            <p className="text-gray-600 text-center py-8">No upcoming appointments</p>
           ) : (
             stats.upcomingAppointments.map((appointment) => (
-              <div key={appointment._id} className="flex items-center justify-between p-4 bg-orange-50 rounded-lg">
-                <div>
-                  <p className="font-semibold text-gray-900">{appointment.name}</p>
-                  <p className="text-sm text-gray-600">{appointment.service?.title}</p>
-                  <p className="text-xs text-gray-500">
+              <div key={appointment._id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 lg:p-4 bg-orange-50 rounded-lg border border-orange-100">
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-gray-900 truncate">{appointment.name}</p>
+                  <p className="text-sm text-gray-600 truncate">{appointment.service?.title}</p>
+                  <p className="text-xs text-gray-500 mt-1">
                     {new Date(appointment.date).toLocaleDateString()} • {appointment.timeSlot}
                   </p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                <span className={`px-3 py-1 rounded-full text-xs lg:text-sm font-medium self-start sm:self-auto ${
                   appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                   'bg-green-100 text-green-800'
                 }`}>
