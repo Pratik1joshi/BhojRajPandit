@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, FaPaperPlane } from 'react-icons/fa';
+import { useProfile } from '@/context/DataCacheContext';
 import toast from 'react-hot-toast';
 
 export default function ContactPage() {
+  const { profile } = useProfile();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,25 +33,25 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      {/* Hero */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <motion.h1
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
+            className="text-center"
           >
-            Contact Us
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
-          >
-            Get in touch for inquiries, bookings, or any questions
-          </motion.p>
+            <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-900 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-orange-100">
+              <span>Contact Us</span>
+            </div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              Get in Touch
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Get in touch for inquiries, bookings, or any questions
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -145,10 +147,10 @@ export default function ContactPage() {
 
               <div className="space-y-6">
                 {[
-                  { icon: FaPhone, title: 'Phone', value: '+1 (234) 567-8900', link: 'tel:+12345678900' },
-                  { icon: FaWhatsapp, title: 'WhatsApp', value: '+1 (234) 567-8900', link: 'https://wa.me/12345678900' },
-                  { icon: FaEnvelope, title: 'Email', value: 'contact@panditji.com', link: 'mailto:contact@panditji.com' },
-                  { icon: FaMapMarkerAlt, title: 'Address', value: 'Your City, State, ZIP', link: '#' },
+                  { icon: FaPhone, title: 'Phone', value: profile?.phone || '+1 (234) 567-8900', link: `tel:${profile?.phone || '+12345678900'}` },
+                  { icon: FaWhatsapp, title: 'WhatsApp', value: profile?.whatsapp || profile?.phone || '+1 (234) 567-8900', link: `https://wa.me/${(profile?.whatsapp || profile?.phone || '12345678900').replace(/[^0-9]/g, '')}` },
+                  { icon: FaEnvelope, title: 'Email', value: profile?.email || 'contact@panditji.com', link: `mailto:${profile?.email || 'contact@panditji.com'}` },
+                  { icon: FaMapMarkerAlt, title: 'Address', value: profile?.city && profile?.state ? `${profile.city}, ${profile.state}` : 'Your City, State', link: '#' },
                 ].map((item, index) => (
                   <motion.a
                     key={item.title}

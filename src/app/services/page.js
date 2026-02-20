@@ -3,14 +3,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaFilter } from 'react-icons/fa';
 import Link from 'next/link';
-import axios from 'axios';
+import { useServices } from '@/context/DataCacheContext';
 import toast from 'react-hot-toast';
 
 export default function ServicesPage() {
-  const [services, setServices] = useState([]);
-  const [filteredServices, setFilteredServices] = useState([]);
+  const { services, loading } = useServices();
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [loading, setLoading] = useState(true);
 
   const categories = [
     { value: 'all', label: 'All Services' },
@@ -21,29 +19,10 @@ export default function ServicesPage() {
     { value: 'consultation', label: 'Consultation' },
   ];
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredServices(services);
-    } else {
-      setFilteredServices(services.filter(service => service.category === selectedCategory));
-    }
-  }, [selectedCategory, services]);
-
-  const fetchServices = async () => {
-    try {
-      const response = await axios.get('/api/services');
-      setServices(response.data.data);
-      setFilteredServices(response.data.data);
-    } catch (error) {
-      toast.error('Failed to load services');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Filter services based on selected category
+  const filteredServices = selectedCategory === 'all' 
+    ? services 
+    : services.filter(service => service.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-white">

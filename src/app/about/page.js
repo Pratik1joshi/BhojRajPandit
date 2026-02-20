@@ -1,27 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaAward, FaBook, FaStar, FaHeart } from 'react-icons/fa';
 import Image from 'next/image';
-import axios from 'axios';
+import { useProfile } from '@/context/DataCacheContext';
 
 export default function AboutPage() {
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const { data } = await axios.get('/api/profile');
-      if (data.success && data.data) {
-        setProfile(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    }
-  };
+  const { profile } = useProfile();
 
   if (!profile) {
     return (
@@ -32,25 +16,25 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      {/* Hero */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <motion.h1
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
+            className="text-center"
           >
-            About {profile.name}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
-          >
-            {profile.title || 'Dedicated to preserving and sharing Hindu traditions with devotion'}
-          </motion.p>
+            <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-900 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-orange-100">
+              <span>About Us</span>
+            </div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              About {profile.name}
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {profile.title || 'Dedicated to preserving and sharing Hindu traditions with devotion'}
+            </p>
+          </motion.div>
         </div>
       </section>
 

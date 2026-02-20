@@ -1,9 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Image from 'next/image';
-import axios from 'axios';
+import { useProfile } from '@/context/DataCacheContext';
 
 export default function About() {
   const [ref, inView] = useInView({
@@ -11,22 +10,7 @@ export default function About() {
     threshold: 0.1,
   });
 
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const { data } = await axios.get('/api/profile');
-      if (data.success && data.data) {
-        setProfile(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    }
-  };
+  const { profile } = useProfile();
 
   if (!profile) {
     return (

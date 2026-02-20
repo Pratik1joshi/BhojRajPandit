@@ -1,15 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useGallery } from '@/context/DataCacheContext';
 import Image from 'next/image';
 
 export default function GalleryPage() {
-  const [gallery, setGallery] = useState([]);
-  const [filteredGallery, setFilteredGallery] = useState([]);
+  const { gallery, loading } = useGallery();
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [loading, setLoading] = useState(true);
 
   const categories = [
     { value: 'all', label: 'All' },
@@ -20,65 +17,46 @@ export default function GalleryPage() {
     { value: 'festival', label: 'Festivals' },
   ];
 
-  useEffect(() => {
-    fetchGallery();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredGallery(gallery);
-    } else {
-      setFilteredGallery(gallery.filter(item => item.category === selectedCategory));
-    }
-  }, [selectedCategory, gallery]);
-
-  const fetchGallery = async () => {
-    try {
-      const response = await axios.get('/api/gallery');
-      setGallery(response.data.data);
-      setFilteredGallery(response.data.data);
-    } catch (error) {
-      toast.error('Failed to load gallery');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Filter gallery based on selected category
+  const filteredGallery = selectedCategory === 'all' 
+    ? gallery 
+    : gallery.filter(item => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      {/* Hero */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <motion.h1
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
+            className="text-center"
           >
-            Gallery
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4"
-          >
-            Glimpses of ceremonies and celebrations we've been honored to be part of
-          </motion.p>
+            <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-900 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-orange-100">
+              <span>Gallery</span>
+            </div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              Our Gallery
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Glimpses of ceremonies and celebrations we've been honored to be part of
+            </p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Filter */}
-      <section className="py-4 md:py-8 sticky top-20 bg-white/95 backdrop-blur-md shadow-md z-40">
+      {/* Filter Section */}
+      <section className="sticky top-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-40 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center space-x-3 md:space-x-4 overflow-x-auto pb-2 scrollbar-hide">
             {categories.map((category) => (
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                className={`px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium whitespace-nowrap transition-all ${
+                className={`px-5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.value
-                    ? 'bg-orange-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-orange-100'
+                    ? 'bg-orange-800 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {category.label}

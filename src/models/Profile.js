@@ -9,6 +9,10 @@ const ProfileSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  heroBio: {
+    type: String,
+    default: '',
+  },
   bio: {
     type: String,
     required: true,

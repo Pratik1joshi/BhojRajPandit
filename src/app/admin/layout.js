@@ -48,7 +48,7 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
@@ -57,10 +57,10 @@ export default function AdminLayout({ children }) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed on all screen sizes */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        className={`fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white transform transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full lg:translate-x-0 lg:z-10'
         }`}
       >
         <div className="h-full flex flex-col">
@@ -119,10 +119,10 @@ export default function AdminLayout({ children }) {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar */}
-        <header className="bg-white shadow-sm sticky top-0 z-30">
+      {/* Main Content - With left margin for fixed sidebar */}
+      <div className="flex flex-col min-h-screen ml-0 lg:ml-64 transition-all duration-300">
+        {/* Top Bar - Sticky */}
+        <header className="bg-white shadow-sm sticky top-0 z-20">
           <div className="flex justify-between items-center px-4 lg:px-8 py-4">
             <div className="flex items-center space-x-4">
               <button
@@ -147,8 +147,8 @@ export default function AdminLayout({ children }) {
           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 p-4 lg:p-8 overflow-auto bg-gray-50">
+        {/* Content - Scrollable */}
+        <main className="flex-1 p-4 lg:p-8 bg-gray-50">
           {children}
         </main>
       </div>

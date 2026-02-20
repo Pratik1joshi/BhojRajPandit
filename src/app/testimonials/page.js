@@ -1,28 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useTestimonials } from '@/context/DataCacheContext';
 
 export default function TestimonialsPage() {
-  const [testimonials, setTestimonials] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
-  const fetchTestimonials = async () => {
-    try {
-      const response = await axios.get('/api/testimonials');
-      setTestimonials(response.data.data.filter(t => t.isApproved));
-    } catch (error) {
-      toast.error('Failed to load testimonials');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { testimonials: allTestimonials, loading } = useTestimonials();
+  const testimonials = allTestimonials.filter(t => t.isApproved);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">

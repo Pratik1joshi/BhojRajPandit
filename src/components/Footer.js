@@ -1,28 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import axios from 'axios';
+import { useProfile } from '@/context/DataCacheContext';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const { data } = await axios.get('/api/profile');
-      if (data.success && data.data) {
-        setProfile(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    }
-  };
+  const { profile } = useProfile();
 
   return (
     <footer className="bg-gray-900 text-white">

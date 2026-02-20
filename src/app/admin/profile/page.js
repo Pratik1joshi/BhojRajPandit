@@ -8,6 +8,7 @@ export default function AdminProfile() {
   const [profile, setProfile] = useState({
     name: '',
     title: '',
+    heroBio: '',
     bio: '',
     email: '',
     phone: '',
@@ -298,15 +299,37 @@ export default function AdminProfile() {
             </div>
           </div>
 
-          {/* Bio */}
+          {/* Bio Section */}
           <div>
-            <label className="block font-medium mb-2 text-gray-700 text-sm">Bio</label>
-            <textarea
-              value={profile.bio}
-              onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-              rows={4}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
+            <h2 className="text-xl font-bold mb-4 text-gray-900 border-b pb-2">Biography</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block font-medium mb-2 text-gray-700 text-sm">
+                  Hero Section Bio (Short) 
+                  <span className="text-gray-500 font-normal ml-2">- Displayed on homepage hero section (2-3 lines recommended)</span>
+                </label>
+                <textarea
+                  value={profile.heroBio}
+                  onChange={(e) => setProfile({ ...profile, heroBio: e.target.value })}
+                  rows={3}
+                  placeholder="Brief introduction for the hero section (e.g., 'Preserving sacred traditions with 15+ years of experience...')"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block font-medium mb-2 text-gray-700 text-sm">
+                  About Page Bio (Full)
+                  <span className="text-gray-500 font-normal ml-2">- Displayed on About page (detailed biography)</span>
+                </label>
+                <textarea
+                  value={profile.bio}
+                  onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                  rows={6}
+                  placeholder="Full detailed biography for the About page"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Stats Section */}

@@ -1,27 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import axios from 'axios';
+import { useProfile } from '@/context/DataCacheContext';
 
 export default function Hero() {
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const { data } = await axios.get('/api/profile');
-      if (data.success && data.data) {
-        setProfile(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    }
-  };
+  const { profile } = useProfile();
 
   if (!profile) {
     return (
@@ -76,7 +60,7 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg"
             >
-              {profile.bio || `Preserving sacred traditions with ${profile.experience}+ years of experience in authentic Hindu rituals, pujas, and spiritual ceremonies.`}
+              {profile.heroBio || `Preserving sacred traditions with ${profile.experience}+ years of experience in authentic Hindu rituals, pujas, and spiritual ceremonies.`}
             </motion.p>
 
             <motion.div

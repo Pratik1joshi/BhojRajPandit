@@ -1,9 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
-import axios from 'axios';
+import { useServices } from '@/context/DataCacheContext';
 
 export default function FeaturedServices() {
   const [ref, inView] = useInView({
@@ -11,24 +10,8 @@ export default function FeaturedServices() {
     threshold: 0.1,
   });
 
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
-    try {
-      const response = await axios.get('/api/services');
-      // Get first 6 services
-      setServices(response.data.data.slice(0, 6));
-    } catch (error) {
-      console.error('Failed to load services');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { services: allServices, loading } = useServices();
+  const services = allServices.slice(0, 6);
 
   return (
     <section ref={ref} className="py-24 bg-gray-50">
